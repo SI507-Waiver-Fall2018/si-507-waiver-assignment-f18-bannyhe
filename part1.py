@@ -13,9 +13,36 @@ access_token = '766827375677939713-mHOg4ynoeyUYILzuyw22ULr4eTFsNgN'
 access_secret = 'EfcVh4sVx9Wfmol32oTmbEk2rwoA7nBKFQPecFuBzVf0u'
 
 # Basic listener that just prints received tweets to stdout.
+class StOutListener(StreamListener):
 
-auth = OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_secret)
+    def on_data(self, data):
+        print on_data
+        return True
+
+    def on_error(self, status):
+        print status
+
+# Find a word in text, return True if found, otherwise it returns False.
+def word_in_text(word, text):
+    word = word.lower()
+    text = text.lower()
+    match = re.search(word, text)
+    if match:
+        return True
+    return False
+
+
+
+if __name__ == '__main__':
+
+    # Handles Twitter authetification and the connection to Twitter Streaming API
+    l = StdOutListener()
+    auth = OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_secret)
+    stream = Stream(auth, 1)
+
+    # Filter Twitter Streams to capture data by the keywords: 'python', 'javascript', 'ruby'
+    stream.filter(track=['python','javascript','ruby'])
 
 api = tweepy.API(auth)
 
