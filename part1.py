@@ -12,41 +12,84 @@ consumer_secret = 'rbzLZS6ghHsp5t5nH0PfAo06eJRyKv6YcNmJ8sJJZlVbLyFVhM'
 access_token = '766827375677939713-mHOg4ynoeyUYILzuyw22ULr4eTFsNgN'
 access_secret = 'EfcVh4sVx9Wfmol32oTmbEk2rwoA7nBKFQPecFuBzVf0u'
 
-# Basic listener that just prints received tweets to stdout.
-class StOutListener(StreamListener):
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_secret)
 
-    def on_data(self, data):
-        print on_data
-        return True
+public_tweets = api.home_timeline() # One possible method! Check out: http://tweepy.readthedocs.io/en/v3.5.0/api.html#timeline-methods
+print(type(public_tweets)," is the type of public tweets")
 
-    def on_error(self, status):
-        print status
+for tweet in public_tweets:
+    print("\n*** type of the tweet object that is included ***\n")
+    print(type(tweet),"type of one tweet")
+    print(tweet) ## Huh. That's not easy to read.
 
-# Find a word in text, return True if found, otherwise it returns False.
-def word_in_text(word, text):
-    word = word.lower()
-    text = text.lower()
-    match = re.search(word, text)
-    if match:
-        return True
-    return False
+# Let's pull apart one tweet to take a look at it.
+single_tweet = public_tweets[0]
 
+## What are the tags?
+print("\n*** tags of the tweet dictionary ***")
+print(single_tweet.keys())
 
+## Well, some of these look interesting.
+## For example,
+print("\nHere's the text of the tweet:")
+print(single_tweet["text"])
+print("\n")
+print("Here are the # of favorites of that tweet:")
+print(single_tweet["favorite_count"])
 
-if __name__ == '__main__':
+## Taking a look at the keys, try printing some other attributes of the tweet!
 
-    # Handles Twitter authetification and the connection to Twitter Streaming API
-    l = StdOutListener()
-    auth = OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_secret)
-    stream = Stream(auth, 1)
+## But what if I don't want just my own public timeline's tweets -- I want to search for a certain phrase on Twitter!
+print("********\n\n\n*******")
+results = api.search(q="university of michigan")
+print(type(results), "is the type of the results variable")
 
-    # Filter Twitter Streams to capture data by the keywords: 'python', 'javascript', 'ruby'
-    stream.filter(track=['python','javascript','ruby'])
+## OK, it's a dictionary. What are its keys?
+print(results.keys())
+
+## That 'statuses' key looks interesting.
+print(type(results["statuses"]), "is the type of results['statuses']")
+## OK, that's a list! Hmm. What's the type of the first element in it?
+print(type(results["statuses"][0]), "is the type of the first element in the results")
+## OK, that's a dictionary. What are its keys? I have a suspicion they'll be the same as the Tweet dictionary I saw before...
+## I'm gonna assign that one tweet to a variable to make it easier.
+umich_tweet = results["statuses"][0]
+## Now, what are its keys?
+print("\nThe keys of the tweet dictionary:")
+print(umich_tweet.keys())
+
+## And the list of tweets is in results["statuses"]..
+list_of_umich_tweets = results["statuses"]
+
+## Iterate over the tweets you get back...
+## And print the text of each one!
+for tweet in list_of_umich_tweets:
+    print(tweet["text"])
+    print("\n")
+
+## Note that there are a bunch of options in the search you can try -- to get more tweets, etc. But for now, look at how much you can access with the basics.
+
+## Here's code to update a status -- uncomment below lines if you fill them in to post something to Twitter
+# stat_text = "" # A string for what you want to be posted on your twitter account
+# ## Uncomment the following line to post a new status
+# api.update_status(stat_text)
 
 api = tweepy.API(auth)
 
 f = open('noun_data.csv','w')
+# Write some explainations and headers for people to read and understand the file
+w_str0 = "We got some songs by searching the word ' " + most_common_word + " ' using iTunes API. \nHere are the results after sorting the songs by their length - longest to shortest: \n"
+f.write(w_str0 + '\n')
+f.write("  \n\n")
+w_str1 = "Noun, Number"
+f.write(w_str1 + '\n')
+
+for song in sorted_song_lst:
+	w_str  = "{}, {}".format(song.noun, song.number)
+	f.write(w_str  + '\n')
+
+f.close()
 
 # usage should be python3 part1.py <username> <num_tweets>
 print "USER: "
@@ -55,5 +98,5 @@ print "VERBS: "
 print "NOUNS: "
 print "ADJECTIVES: "
 print "ORIGINAL TWEETS: "
-print "TIMES FAVORTIED (ORIGINAL TWEETS ONLY): "
+print "TIMES FAVORITED (ORIGINAL TWEETS ONLY): "
 print "TIMES RETWEETED (ORIGINAL TWEETS ONLY): "
