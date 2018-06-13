@@ -42,7 +42,7 @@ print(single_tweet["favorite_count"])
 
 ## But what if I don't want just my own public timeline's tweets -- I want to search for a certain phrase on Twitter!
 print("********\n\n\n*******")
-results = api.search(q="university of michigan")
+results = api.search(q="NBA")
 print(type(results), "is the type of the results variable")
 
 ## OK, it's a dictionary. What are its keys?
@@ -54,17 +54,17 @@ print(type(results["statuses"]), "is the type of results['statuses']")
 print(type(results["statuses"][0]), "is the type of the first element in the results")
 ## OK, that's a dictionary. What are its keys? I have a suspicion they'll be the same as the Tweet dictionary I saw before...
 ## I'm gonna assign that one tweet to a variable to make it easier.
-umich_tweet = results["statuses"][0]
+nba_tweet = results["statuses"][0]
 ## Now, what are its keys?
 print("\nThe keys of the tweet dictionary:")
-print(umich_tweet.keys())
+print(nba_tweet.keys())
 
 ## And the list of tweets is in results["statuses"]..
-list_of_umich_tweets = results["statuses"]
+list_of_nba_tweets = results["statuses"]
 
 ## Iterate over the tweets you get back...
 ## And print the text of each one!
-for tweet in list_of_umich_tweets:
+for tweet in list_of_nba_tweets:
     print(tweet["text"])
     print("\n")
 
@@ -79,14 +79,14 @@ api = tweepy.API(auth)
 
 f = open('noun_data.csv','w')
 # Write some explainations and headers for people to read and understand the file
-w_str0 = "We got some songs by searching the word ' " + most_common_word + " ' using iTunes API. \nHere are the results after sorting the songs by their length - longest to shortest: \n"
+w_str0 = "We got five most frequent nouns by searching the word using Twitter API. \nHere are the results after sorting the nouns by their number of appearance - most to least: \n"
 f.write(w_str0 + '\n')
 f.write("  \n\n")
 w_str1 = "Noun, Number"
 f.write(w_str1 + '\n')
 
-for song in sorted_song_lst:
-	w_str  = "{}, {}".format(song.noun, song.number)
+for noun in sorted_noun_lst:
+	w_str  = "{}, {}".format(lst.noun, lst.number)
 	f.write(w_str  + '\n')
 
 f.close()
