@@ -44,6 +44,7 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
+<<<<<<< HEAD
 # Get twwets and a list of words to analyze
 word_list = []
 public_tweets = api.user_timeline(id=username, count=tweets_num, tweet_mode="extended")
@@ -75,6 +76,63 @@ adjectives = word_count(adjectives)
 verbs = sorted_list(verbs)
 nouns = sorted_list(nouns)
 adjectives = sorted_list(adjectives)
+=======
+def request(username, tweets_num):
+    public_tweets = api.user_timeline(id=username, count=tweets_num, tweet_mode="extended")
+    return public_tweets
+
+# Get tweets
+tweets_list = []
+for tweet in request(username, tweets_num):
+    tweets_list.append(tweet.full_text)
+
+tweets = api.search(username)
+
+print("USER: ", username)
+print("TWEETS ANALYZED: ", tweets_num)
+
+# Step 2 - Analyze Tweets
+
+word_lst = [] # List to store words
+ignore_lst = ["http","https","RT"] # List of words to be ignored
+
+from nltk.tokenize import word_tokenize
+
+# Read through each tweet, and add the real words into word_lst
+for tweet in tweet_list:
+    tokenized_text = word_tokenize(tweet) # tokenize the words in the tweet
+
+    # Iterate through each word in tokenized text & filter out the word if it's a stop word
+    for word in tokenized_text:
+        # Check if the word starts with an alphabetic character [a-z/A-Z], and if it is not in ignore_lst
+        if word[0].isalpha() and word not in ignore_lst:
+            word_lst.append(word) # Add the word to word_lst
+
+tag_lst = nltk.pos_tag(word_lst)
+
+# Step 3 - Five most frequent verbs
+
+verb_lst = []
+
+for word_tag_tuple in tag_lst:
+    if word_tag_tuple[1][:2] == 'VB':
+        verb_lst.append(word_tag_tuple[0])
+
+# Count the frequency distribution on word
+verb_freq_dic = nltk.FreqDist(verb_lst)
+
+# Sort the words by their frequency
+sorted_verb_freq_lst = sorted(verb_freq_dic.items(), key=lambda x:x[1], reverse = True)
+
+# Print the 5 most common words
+print("VERBS: ", end=' ')
+for word_freq_tuple in sorted_verb_freq_lst[0:5]:
+    word, frequency = word_freq_tuple # unpack the tuple
+    print(word, "(" + str(frequency) + ")" , end=' ')
+print('')
+
+# Step 4 - Five most common nouns
+>>>>>>> 73f5145f5883ac7946060c5c13cd936b9feb1048
 
 ori_tweets = 0
 fav_num = 0
