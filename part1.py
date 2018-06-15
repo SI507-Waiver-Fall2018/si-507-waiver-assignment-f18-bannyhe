@@ -71,7 +71,7 @@ verb_freq_dic = nltk.FreqDist(verb_lst)
 sorted_verb_freq_lst = sorted(verb_freq_dic.items(), key=lambda x:x[1], reverse = True)
 
 # Print the 5 most common words
-print ("VERBS: ", end=' ')
+print("VERBS: ", end=' ')
 for word_freq_tuple in sorted_verb_freq_lst[0:5]:
     word, frequency = word_freq_tuple # unpack the tuple
     print(word, "(" + str(frequency) + ")" , end=' ')
