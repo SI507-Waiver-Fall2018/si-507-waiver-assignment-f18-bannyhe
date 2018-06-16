@@ -44,8 +44,7 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
-<<<<<<< HEAD
-# Get twwets and a list of words to analyze
+# Get tweets and a list of words to analyze
 word_list = []
 public_tweets = api.user_timeline(id=username, count=tweets_num, tweet_mode="extended")
 for tweets in public_tweets:
@@ -76,7 +75,7 @@ adjectives = word_count(adjectives)
 verbs = sorted_list(verbs)
 nouns = sorted_list(nouns)
 adjectives = sorted_list(adjectives)
-=======
+
 def request(username, tweets_num):
     public_tweets = api.user_timeline(id=username, count=tweets_num, tweet_mode="extended")
     return public_tweets
@@ -132,7 +131,6 @@ for word_freq_tuple in sorted_verb_freq_lst[0:5]:
 print('')
 
 # Step 4 - Five most common nouns
->>>>>>> 73f5145f5883ac7946060c5c13cd936b9feb1048
 
 ori_tweets = 0
 fav_num = 0

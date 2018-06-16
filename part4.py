@@ -11,10 +11,10 @@ freq = []
 
 # Open CSV file
 with open("noun_data.csv") as f:
-    firstLine = True
+    first = True
     for line in f:
-        if firstLine:
-            firstLine = False
+        if first:
+            first = False
         else:
             data = line.split(",")
             word.append(data[0])
