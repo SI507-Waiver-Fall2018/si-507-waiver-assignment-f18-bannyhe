@@ -8,10 +8,6 @@ import sys
 
 # usage should be python3 part1.py <username> <num_tweets>
 
-# Get information of arguments
-username = sys.argv[1]
-tweets_num = sys.argv[2]
-
 # Find word frequency
 def word_count(word_lst):
     unique_words = set(word_lst)
@@ -43,6 +39,10 @@ access_token_secret = 'EfcVh4sVx9Wfmol32oTmbEk2rwoA7nBKFQPecFuBzVf0u'
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
+
+# Get information of arguments
+username = sys.argv[1]
+tweets_num = sys.argv[2]
 
 # Get tweets and a list of words to analyze
 word_list = []
