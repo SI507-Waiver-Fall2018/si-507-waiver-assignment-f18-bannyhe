@@ -5,8 +5,9 @@ import json
 import sys
 
 # write your code here
-
 # usage should be python3 part1.py <username> <num_tweets>
+from nltk.corpus import *
+from nltk import FreqDist
 
 # Find word frequency
 def word_count(word_lst):
@@ -41,29 +42,41 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
 # Get information of arguments
-username = sys.argv[1]
-tweets_num = sys.argv[2]
+input_user = sys.argv[1]
+username = api.get_user(input_user)
+tweets_num = int(sys.argv[2])
+special_words = ['http', 'https', 'RT']
+dict = {}
 
 # Get tweets and a list of words to analyze
 word_list = []
-public_tweets = api.user_timeline(id=username, count=tweets_num, tweet_mode="extended")
+public_tweets = api.user_timeline(user.screen_name, count=tweets_num)
 for tweets in public_tweets:
-    tokenized_tweet = nltk.tokenize.word_tokenize(tweet._json["full_text"])
+    tokenized_tweet = nltk.tokenize.word_tokenize(tweet.text)
+    #print(tokenized_tweet)
     for token in tokenized_tweet:
-        word_list.append(token)
+        if (token[0].isalpha()) and (token not in special_words):
+            dict[token] = 1
+        else:
+            dict[token] += 1
+
+# Sort words
+sort_key = sorted(list(dict.keys()), key = lambda x: dict[k], reverse = True)
 
 # Analyze words
-tagged = nltk.pos_tag(word_list)
+tagged = nltk.pos_tag(sort_key)
 verbs = []
 nouns = []
 adjectives = []
 
 for word in tagged:
-    if word[1].startswith("VB"):
+    if "VB" in word[1]:
         verbs.append(word[0])
-    elif word[1].startswith("NN"):
+for word in tagged:
+    if "NN" in word[1]:
         nouns.append(word[0])
-    elif word[1].startswith("JJ"):
+for word in tagged:
+    if "JJ" in word[1]:
         adjectives.append(word[0])
 
 # Get word frequency
@@ -87,8 +100,8 @@ for tweet in request(username, tweets_num):
 
 tweets = api.search(username)
 
-print("USER: ", username)
-print("TWEETS ANALYZED: ", tweets_num)
+print("USER: ", username.screen_name)
+print("TWEETS ANALYZED: ", str(tweets_num))
 
 # Step 2 - Analyze Tweets
 
@@ -153,8 +166,8 @@ print("TIMES RETWEETED (ORIGINAL TWEETS ONLY): ", retweet_num)
 
 
 # Make a CSV file and save the 5 most frequent nouns
-
-with open('noun_data.csv','w') as f:
-    print("Noun", "Number", file=f, sep=",")
-    for i in range(5):
-        print(nouns[i][0], nouns[i][1], file=f, sep=",")
+f = open('noun_data.csv','w')
+f.write("Noun", "Number\n")
+for noun in range(5):
+    f.write("{},{}\n".format(noun[i][0], noun[i][1]))
+f.close()
