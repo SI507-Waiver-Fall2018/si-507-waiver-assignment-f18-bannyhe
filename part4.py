@@ -14,15 +14,24 @@ word = []
 freq = []
 
 # Open CSV file
-with open("noun_data.csv") as f:
-    first = True
-    for line in f:
-        if first:
-            first = False
-        else:
-            data = line.split(",")
-            word.append(data[0])
-            freq.append(int(data[1].strip('\n')))
+f = open("noun_data.csv", "r")
+f_read = f.readlines()
+f.close()
 
-data = [go.Bar(x=word, y=freq)]
-offline.plot(data, filename='part4_viz_image.html', image='png', image_filename='part4_viz_image')
+for n in range(len(f_read)):
+	if n > 0:
+		line = f_read[n].split(",")
+		word.append(str(line[0]))
+		freq.append(int(line[1].strip()))
+
+data = [go.Bar(
+            x = word,
+            y = freq,
+            name = 'Most Frequent Nouns',
+    )]
+
+layout = go.Layout(title="Most Used Nouns")
+nouns_figure = go.Figure(data=data, layout=layout)
+
+py.plot(data, filename='part4_viz_image')
+py.image.save_as(nouns_figure, filename='part4_viz_image.png')
