@@ -1,3 +1,5 @@
+# Name: Mu He
+# Uniq: bannyhe
 # these should be the only imports you need
 
 import requests
@@ -6,7 +8,7 @@ from bs4 import BeautifulSoup
 # write your code here
 # usage should be python3 part3.py
 
-# Print out the header line
+# Print header line
 print("Michigan Daily - Most Read Stories")
 # Make html request to url
 url = "https://www.michigandaily.com"
